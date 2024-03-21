@@ -8,7 +8,7 @@ export const NavBar = () => {
   return (
 
     <HashRouter>
-      <div className="App">
+      <div>
         <div>
         <div className="Navbarlinksright">
             <NavLink className="Navbarlinksgap" to="/home">Home</NavLink>
@@ -16,16 +16,14 @@ export const NavBar = () => {
             <NavLink className="Navbarlinksgap" to="/aboutus">Aboutus</NavLink>
         </div>
         </div><br />
-        <div>
+        <div className="App">
           <Routes >
-            <Route  exact path="/home" element={<Home />}></Route>
+            <Route exact path="/home" element={<Home />}></Route>
             <Route exact path="/contactus" element={<Contactus />}></Route>
             <Route exact path="/aboutus" element={<Aboutus />}></Route>
           </Routes>
         </div>
       </div>
     </HashRouter>
-
-
   )
 }
