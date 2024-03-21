@@ -4,7 +4,9 @@
 
 .Navbarlinksright{
   float: right;
+  padding: 0px;
 }
-.Navbarlinks {
+
+.Navbarlinksgap{
   padding: 10px;
 }

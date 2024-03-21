@@ -1,22 +1,28 @@
 import React from 'react'
 import Home from './Home'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes, NavLink } from 'react-router-dom'
+import { Contactus } from './Contactus'
+import { Aboutus } from './Aboutus'
 
 export const NavBar = () => {
   return (
 
     <HashRouter>
-      <div className="Navbarlinksright">
-        <ul>
-          <a className="Navbarlinks" href="/">Home</a>
-          <a className="Navbarlinks" href="/contactus">Contact us</a>{ }
-          <a className="Navbarlinks" href="/aboutus">About us</a>
-        </ul>
-      </div>
-      <div>
-        <Routes>
-          <Route exact path="/" element={<Home />}></Route>
-        </Routes>
+      <div className="App">
+        <div>
+        <div className="Navbarlinksright">
+            <NavLink className="Navbarlinksgap" to="/home">Home</NavLink>
+            <NavLink className="Navbarlinksgap" to="/contactus">Contactus</NavLink>
+            <NavLink className="Navbarlinksgap" to="/aboutus">Aboutus</NavLink>
+        </div>
+        </div><br />
+        <div>
+          <Routes >
+            <Route  exact path="/home" element={<Home />}></Route>
+            <Route exact path="/contactus" element={<Contactus />}></Route>
+            <Route exact path="/aboutus" element={<Aboutus />}></Route>
+          </Routes>
+        </div>
       </div>
     </HashRouter>
 
