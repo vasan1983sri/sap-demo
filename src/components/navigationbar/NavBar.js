@@ -3,10 +3,10 @@ import Home from './Home'
 import { HashRouter, Route, Routes, NavLink } from 'react-router-dom'
 import { Contactus } from './Contactus'
 import { Aboutus } from './Aboutus'
+import UserDetailsForm from '../body/components/UserDetailsForm'
 
 export const NavBar = () => {
   return (
-
     <HashRouter>
       <div>
         <div>
@@ -21,6 +21,7 @@ export const NavBar = () => {
             <Route exact path="/home" element={<Home />}></Route>
             <Route exact path="/contactus" element={<Contactus />}></Route>
             <Route exact path="/aboutus" element={<Aboutus />}></Route>
+            <Route exact path="/userRegistrationForm" element={<UserDetailsForm />} />
           </Routes>
         </div>
       </div>
