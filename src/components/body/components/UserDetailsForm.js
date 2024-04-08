@@ -2,10 +2,6 @@ import React from 'react'
 
 export default function UserDetailsForm() {
 
-  const inlineGap = {
-    marginRight: "8px"
-  }
-
   return (
     <div>
       <div className="userDetailsForm">
