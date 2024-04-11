@@ -14,13 +14,15 @@ export default function Home() {
      {/* <h1>Home Page</h1> */}
      <div>
       <ul className="listAlignment">
-        <Link to="/userRegistrationForm" className="btn btn-primary">User Details Form</Link>
+        <Link to="/userRegistrationForm" className="listAlignment">User Details Form</Link>
+        <Link  className="listAlignment">User Details Form1</Link>
       </ul>
+      {/* <button class="button-style">User Form</button>
+      <button class="button-style">User Form 1</button> */}
       <div>
-        <h1>Smaple H1</h1>
-        <button onClick={handleUserForm}>Sample</button>
+        <button class="button-style" onClick={handleUserForm}>User Registration</button>
+       
       </div>
-      
      </div>
       </div>
   )
