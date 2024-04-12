@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function UserDetailsForm() {
+export default function UserDetailsForm({screenName}) {
+
+  const sN = screenName;
+
+  console.log({screenName})
 
   let nav = useNavigate();
 
@@ -15,10 +19,10 @@ export default function UserDetailsForm() {
     lastName: "",
     phoneNumber: "",
     email: "",
-    address:"",
-    city:"",
-    state:"",
-    zipCode:"",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
   }
 
   const [formData, setFormData] = useState(initialValue)
@@ -27,38 +31,50 @@ export default function UserDetailsForm() {
   console.log(formData)
 
 
-  const handleFirstNameChange = (e) => {
+  const handleURFormInputChange = (e) => {
     e.preventDefault()
-    setFormData({...formData, firstName: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const resetURForm = (e) => {
+    e.preventDefault()
+    setFormData(initialValue)
+  }
+
+  const submitURDetails = () => {
+    alert(`${ JSON.stringify(formData, null,' ') }`)
   }
 
   return (
     <div>
-      <div className="userDetailsForm">
-        <div>
-          <h3>User Details</h3>
-          <input type="text" id="first_Name" placeholder="First Name" value={formData.firstName} onChange={handleFirstNameChange} />
-          <input type="text" id="middle_Name" placeholder="Middle Name" />
-          <input type="text" id="last_Name" placeholder="Last Name" />
+      <h1>User Registration Form</h1>
+      <form onSubmit={submitURDetails}>
+        <div className="userDetailsForm">
+          <div>
+            <h3>User Details</h3>
+            <input type="text" id="firstName" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleURFormInputChange} />
+            <input type="text" id="middleName" placeholder="Middle Name" name="middleName" value={formData.middleName} onChange={handleURFormInputChange} />
+            <input type="text" id="lastName" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleURFormInputChange} />
+          </div>
+          <div>
+            <h3>Contact Info</h3>
+            <input type="text" placeholder="(123)-567-7890)" name="phoneNumber" value={formData.phoneNumber} onChange={handleURFormInputChange} />
+            <input type="text" placeholder="example@email.com" name="email" value={formData.email} onChange={handleURFormInputChange} />
+          </div>
+          <div>
+            <h3>Address Details</h3>
+            <input type="text" placeholder="Address" name="address" value={formData.address} onChange={handleURFormInputChange} />
+            <input type="text" placeholder="City" name="city" value={formData.city} onChange={handleURFormInputChange} />
+            <input type="text" placeholder="State" name="state" value={formData.state} onChange={handleURFormInputChange} />
+            <input type="text" placeholder="Zip Code" name="zipCode" value={formData.zipCode} onChange={handleURFormInputChange} />
+          </div>
         </div>
-        <div>
-          <h3>Contact Info</h3>
-          <input type="text" placeholder="(123)-567-7890)" />
-          <input type="text" placeholder="example@email.com" />
+        <div className="userDetailsForm">
+          <button class="button-style" onClick={handlePrevBtnClick}>Previous</button>
+          <button class="button-style" type='submit'>Submit</button>
+          <button class="button-style" onClick={resetURForm}>Reset</button>
         </div>
-        <div>
-          <h3>Address Details</h3>
-          <input type="text" placeholder="Address" />
-          <input type="text" placeholder="City" />
-          <input type="text" placeholder="State" />
-          <input type="text" placeholder="Zip Code" />
-        </div>
-      </div>
-      <div className="userDetailsForm">
-        <button class="button-style" onClick={handlePrevBtnClick}>Previous</button>
-        <button class="button-style">Submit</button>
-        <button class="button-style">Reset</button>
-      </div>
+      </form>
     </div>
   )
 }

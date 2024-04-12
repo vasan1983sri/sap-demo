@@ -8,7 +8,6 @@ export default function Home() {
   const handleUserForm = () => {
     nav('/userRegistrationForm')
   }
-
   return (
     <div>
      {/* <h1>Home Page</h1> */}
