@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function UserDetailsForm({screenName}) {
+export default function UserDetailsForm({ screenName }) {
 
   const sN = screenName;
 
-  console.log({screenName})
+  console.log({ screenName })
 
   let nav = useNavigate();
 
@@ -27,8 +27,9 @@ export default function UserDetailsForm({screenName}) {
 
   const [formData, setFormData] = useState(initialValue)
 
+  const [errors, setErrors] = useState({})
 
-  console.log(formData)
+  const isFormValid = Boolean(formData.firstName && formData.lastName && formData.phoneNumber)
 
 
   const handleURFormInputChange = (e) => {
@@ -41,21 +42,61 @@ export default function UserDetailsForm({screenName}) {
     setFormData(initialValue)
   }
 
-  const submitURDetails = () => {
-    alert(`${ JSON.stringify(formData, null,' ') }`)
+  const submitURDetails = (e) => {
+    //alert(`${JSON.stringify(formData, null, ' ')}`)
+     const validationErrors = {}
+    // alert(`"First Name: "  ${formData.firstName}`)
+    // if (!formData.firstName.trim() || formData.firstName === '') {
+    //   validationErrors.firstName = "Name is required"
+    // }
+    // setErrors(validationErrors)
+
+    // if(isFormValid)
+    // {
+    //   alert("Form Submitted Successfully")
+    // }
+    alert(`${isFormValid}`)
+    
+    if(!isFormValid)
+    {
+      e.preventDefault()
+      if(!formData.firstName && !formData.lastName && !formData.phoneNumber)
+      {
+        validationErrors.firstName = "First Name,  Last Name and Phone Number are required"
+      } else if(!formData.firstName)
+      {
+        validationErrors.firstName = "First Name is required"
+      } else if(!formData.lastName)
+      {
+        validationErrors.firstName = "Last Name is required"
+      } else if(!formData.phoneNumber){
+        validationErrors.phoneNumber = "Phone Number is required"
+      }      
+      setErrors(validationErrors)
+      return false;
+    }
   }
 
   return (
     <div>
+
       <h1>User Registration Form</h1>
+
       <form onSubmit={submitURDetails}>
         <div className="userDetailsForm">
           <div>
+            <div>
+              <ul>
+                <p style={{color: 'red', alignContent: 'center'}}>{errors.firstName}</p>
+              </ul>
+              
+            </div>
             <h3>User Details</h3>
             <input type="text" id="firstName" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleURFormInputChange} />
             <input type="text" id="middleName" placeholder="Middle Name" name="middleName" value={formData.middleName} onChange={handleURFormInputChange} />
             <input type="text" id="lastName" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleURFormInputChange} />
           </div>
+
           <div>
             <h3>Contact Info</h3>
             <input type="text" placeholder="(123)-567-7890)" name="phoneNumber" value={formData.phoneNumber} onChange={handleURFormInputChange} />
@@ -71,10 +112,12 @@ export default function UserDetailsForm({screenName}) {
         </div>
         <div className="userDetailsForm">
           <button class="button-style" onClick={handlePrevBtnClick}>Previous</button>
-          <button class="button-style" type='submit'>Submit</button>
+          <button class="button-style" type='submit' title=''>Submit</button>
           <button class="button-style" onClick={resetURForm}>Reset</button>
         </div>
+
       </form>
+
     </div>
   )
 }
