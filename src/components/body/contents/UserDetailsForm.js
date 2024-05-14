@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -5,7 +6,7 @@ export default function UserDetailsForm({ screenName }) {
 
   const sN = screenName;
 
-  console.log({ screenName })
+  const postUrl = 'http://localhost:8082/spa/userDetails/save';
 
   let nav = useNavigate();
 
@@ -32,6 +33,58 @@ export default function UserDetailsForm({ screenName }) {
   const isFormValid = Boolean(formData.firstName && formData.lastName && formData.phoneNumber)
 
 
+  const validateUDForm = () => {
+    let isValid = true;
+    const validationErrors = {}
+
+    if (!formData.firstName && !formData.lastName && !formData.phoneNumber) {
+      validationErrors.firstName = "First Name, Last Name and Phone Number are required"
+      isValid = false
+    }else    
+    if (!formData.firstName) {
+      validationErrors.firstName = "First Name is required"
+      isValid = false
+    } else 
+    if (!formData.lastName) {
+      validationErrors.lastName = "Last Name is required"
+      isValid = false
+    } else
+    if (!formData.phoneNumber) {
+      validationErrors.phoneNumber = "Phone Number is required"
+      isValid = false
+    }
+    setErrors(validationErrors)
+    return isValid;
+  }
+
+  // {
+  //   "firstName": formData.firstName,
+  //   "middleName": formData.middleName,
+  //   "lastName": formData.lastName,
+  //   "phoneNumber": formData.phoneNumber,
+  //   "email": formData.email,
+  //   "address": formData.address,
+  //   "city": formData.city,
+  //   "state": formData.state,
+  //   "zipCode": formData.zipCode,
+  // }
+  const handleSubmitForm = () => {
+    // console.log( `${formData.firstName}`)
+    const json = JSON.stringify(formData);
+    console.log(json)
+
+    axios.post(postUrl, json, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        'Content-Type': 'application/json'
+      }}).then((response) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+    alert(`${formData}`)
+  }
+
   const handleURFormInputChange = (e) => {
     e.preventDefault()
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -39,42 +92,17 @@ export default function UserDetailsForm({ screenName }) {
 
   const resetURForm = (e) => {
     e.preventDefault()
+    setErrors('')
     setFormData(initialValue)
   }
 
   const submitURDetails = (e) => {
-    //alert(`${JSON.stringify(formData, null, ' ')}`)
-     const validationErrors = {}
-    // alert(`"First Name: "  ${formData.firstName}`)
-    // if (!formData.firstName.trim() || formData.firstName === '') {
-    //   validationErrors.firstName = "Name is required"
-    // }
-    // setErrors(validationErrors)
-
-    // if(isFormValid)
-    // {
-    //   alert("Form Submitted Successfully")
-    // }
-    alert(`${isFormValid}`)
-    
-    if(!isFormValid)
-    {
-      e.preventDefault()
-      if(!formData.firstName && !formData.lastName && !formData.phoneNumber)
-      {
-        validationErrors.firstName = "First Name,  Last Name and Phone Number are required"
-      } else if(!formData.firstName)
-      {
-        validationErrors.firstName = "First Name is required"
-      } else if(!formData.lastName)
-      {
-        validationErrors.firstName = "Last Name is required"
-      } else if(!formData.phoneNumber){
-        validationErrors.phoneNumber = "Phone Number is required"
-      }      
-      setErrors(validationErrors)
-      return false;
+    e.preventDefault()
+    if (validateUDForm()) {
+      alert(`${JSON.stringify(formData, null, ' ')}`)
+      handleSubmitForm();
     }
+
   }
 
   return (
@@ -87,16 +115,14 @@ export default function UserDetailsForm({ screenName }) {
           <div>
             <div>
               <ul>
-                <p style={{color: 'red', alignContent: 'center'}}>{errors.firstName}</p>
+                <p style={{ color: 'red', alignContent: 'center' }}>{errors.firstName}{errors.lastName}{errors.phoneNumber}</p>
               </ul>
-              
             </div>
             <h3>User Details</h3>
             <input type="text" id="firstName" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleURFormInputChange} />
             <input type="text" id="middleName" placeholder="Middle Name" name="middleName" value={formData.middleName} onChange={handleURFormInputChange} />
             <input type="text" id="lastName" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleURFormInputChange} />
           </div>
-
           <div>
             <h3>Contact Info</h3>
             <input type="text" placeholder="(123)-567-7890)" name="phoneNumber" value={formData.phoneNumber} onChange={handleURFormInputChange} />
