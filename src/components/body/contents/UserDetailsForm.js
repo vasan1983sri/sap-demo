@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function UserDetailsForm({ screenName }) {
 
-  const sN = screenName;
+  //const sN = screenName;
 
   const postUrl = 'http://localhost:8082/spa/userDetails/save';
 
@@ -30,7 +30,7 @@ export default function UserDetailsForm({ screenName }) {
 
   const [errors, setErrors] = useState({})
 
-  const isFormValid = Boolean(formData.firstName && formData.lastName && formData.phoneNumber)
+  //const isFormValid = Boolean(formData.firstName && formData.lastName && formData.phoneNumber)
 
 
   const validateUDForm = () => {
