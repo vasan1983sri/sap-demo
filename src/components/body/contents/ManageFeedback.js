@@ -1,12 +1,34 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { useTable } from 'react-table'
 import * as Constants from '../../utils/App_Constants';
+import FeedbackTable from './FeedbackTable';
+import { FEEDBACK_COLUMNS } from '../table/TableColumns'
+import '../table/table.css'
+
+
+function extractFeedbackResponse(response, fBdataResponse, setMessages) {
+  const data = response.data;
+  data.map(x => {
+    fBdataResponse.push({
+      id: x.id,
+      flName: x.flName,
+      phoneNumber: x.phoneNumber,
+      email: x.email,
+      fbMessage: x.fbMessage
+    })
+  })
+  setMessages(fBdataResponse)
+}
 
 export default function ManageFeedback() {
   let nav = useNavigate();
+
   const Feedback_ByName_URL = Constants.Feedback_ByName_URL;
   const ALL_Feedback_URL = Constants.Feedback_GETALL_URL;
+
+  
 
   const handlePrevBtnClick = () => {
     nav('/home');
@@ -48,30 +70,22 @@ export default function ManageFeedback() {
 
   const handleAllFeedback = (e) => {
     e.preventDefault()
-    const fBdataResponse = []
+    const fBDataResponse = []
+    setErrors({})
     if (!fbFormData.flName) {
       axios.get(ALL_Feedback_URL).then(
         (response) => {
-          const data = response.data;
-          data.map(x => {
-            fBdataResponse.push({
-              id: x.id,
-              flName: x.flName,
-              phoneNumber: x.phoneNumber,
-              email: x.email,
-              fbMessage: x.fbMessage
-            })
-          })
-          setMessages(fBdataResponse)
+          extractFeedbackResponse(response, fBDataResponse, setMessages);
         }
       )
     }
+   
   }
 
   const handleFeedbackSearch = (e) => {
     e.preventDefault()
     setMessages([])
-    const fBdataResponse = []
+    const fBDataResponse = []
     const newErrors = {}
     if (validateFeedbackSearchForm()) {
 
@@ -82,22 +96,13 @@ export default function ManageFeedback() {
       })
         .then((response) => {
           const data = response.data;
-          if (data.length === 0) {
+          if (response.data.length === 0) {
             newErrors.NoRecord = "No Feedback Exist for user - " + fbFormData.flName
             setErrors(newErrors)
             setFbFormData(initialFBFormValue)
           } else {
             //console.log(data)
-            data.map(x => {
-              fBdataResponse.push({
-                id: x.id,
-                flName: x.flName,
-                phoneNumber: x.phoneNumber,
-                email: x.email,
-                fbMessage: x.fbMessage
-              })
-            })
-            setMessages(fBdataResponse)
+            extractFeedbackResponse(response, fBDataResponse, setMessages);
             setFbFormData(initialFBFormValue)
           }
         }
@@ -107,6 +112,7 @@ export default function ManageFeedback() {
         });
     }
   }
+
   return (
     <div>
       <form onSubmit={handleFeedbackSearch}>
@@ -124,17 +130,10 @@ export default function ManageFeedback() {
           </div>
           <div>
             {errors.NoRecord && <div className="fb-md-error" >{errors.NoRecord} </div>}
-            {
-              messages.map(e => {
-                return (
-                  <><p>
-                    id: {e.id} , Name: {e.flName}, PhoneNumber: {e.phoneNumber}, Feedback Message: {e.fbMessage}
-                  </p></>)
-              })}
           </div>
-
         </div>
       </form>
+      <FeedbackTable messages={messages}/>
     </div>
   )
 }

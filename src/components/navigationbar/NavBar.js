@@ -6,6 +6,8 @@ import { Aboutus } from './Aboutus'
 import UserDetailsForm from '../body/contents/UserDetailsForm'
 import FeedbackForm from '../body/contents/FeedbackForm'
 import ManageFeedback from '../body/contents/ManageFeedback'
+import FeedbackTable from '../body/contents/FeedbackTable'
+import SampleTable from '../body/contents/SampleTable'
 
 export const NavBar = () => {
   return (
@@ -26,6 +28,7 @@ export const NavBar = () => {
             <Route exact path="/userRegistrationForm" element={<UserDetailsForm />} />
             <Route exact path="/feedbackForm" element={<FeedbackForm />} />
             <Route exact path="/manageFeedback" element={<ManageFeedback />} />
+            <Route exact path="/sampleTable" element={<SampleTable />} />
           </Routes>
         </div>
       </div>

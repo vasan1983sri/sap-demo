@@ -16,6 +16,9 @@ export default function Home() {
   const handleManageFeedbackForm = () => {
     nav('/managefeedback')
   }
+  const handleManageFeedbackTable = () => {
+    nav('/sampleTable')
+  }
   return (
     <div>
      {/* <h1>Home Page</h1> */}
@@ -30,7 +33,8 @@ export default function Home() {
       <div>
         <button class="button-style" onClick={handleUserRegistrationForm}>User Registration</button>
         <button class="button-style" onClick={handleUserFeedbackForm}>Feedback</button>
-        <button class="button-style" onClick={handleManageFeedbackForm}>Manage Feedback</button>        
+        <button class="button-style" onClick={handleManageFeedbackForm}>Manage Feedback</button> 
+        <button class="button-style" onClick={handleManageFeedbackTable}>Sample Table</button>       
       </div>
      </div>
       </div>
