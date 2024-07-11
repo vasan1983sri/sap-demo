@@ -69,10 +69,8 @@ export default function UserDetailsForm({ screenName }) {
   //   "zipCode": formData.zipCode,
   // }
   const handleSubmitForm = () => {
-    // console.log( `${formData.firstName}`)
     const json = JSON.stringify(formData);
-    console.log(json)
-
+    
     axios.post(postUrl, json, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
@@ -82,7 +80,8 @@ export default function UserDetailsForm({ screenName }) {
     }, (error) => {
       console.log(error);
     });
-    alert(`${formData}`)
+    //alert(`${formData}`)
+    setFormData(initialValue)
   }
 
   const handleURFormInputChange = (e) => {
@@ -99,7 +98,7 @@ export default function UserDetailsForm({ screenName }) {
   const submitURDetails = (e) => {
     e.preventDefault()
     if (validateUDForm()) {
-      alert(`${JSON.stringify(formData, null, ' ')}`)
+      //alert(`${JSON.stringify(formData, null, ' ')}`)
       handleSubmitForm();
     }
 

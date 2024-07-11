@@ -25,4 +25,8 @@ export const FEEDBACK_COLUMNS = [
         Header: 'Message',
         accessor: 'fbMessage'
     },
+    {
+        Header: 'Created On',
+        accessor: 'createdOn'
+    },
 ]

@@ -1,25 +1,27 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import { useTable } from 'react-table'
 import * as Constants from '../../utils/App_Constants';
 import FeedbackTable from './FeedbackTable';
-import { FEEDBACK_COLUMNS } from '../table/TableColumns'
 import '../table/table.css'
 
 
-function extractFeedbackResponse(response, fBdataResponse, setMessages) {
+function extractFeedbackResponse(response, fBdataResponse, setMessages, setPIndex) {
   const data = response.data;
-  data.map(x => {
-    fBdataResponse.push({
-      id: x.id,
-      flName: x.flName,
-      phoneNumber: x.phoneNumber,
-      email: x.email,
-      fbMessage: x.fbMessage
+  if (data.length > 0) {
+    data.map(x => {
+      fBdataResponse.push({
+        id: x.id,
+        flName: x.flName,
+        phoneNumber: x.phoneNumber,
+        email: x.email,
+        fbMessage: x.fbMessage,
+        createdOn: x.updt_ts,
+      })
     })
-  })
-  setMessages(fBdataResponse)
+    setMessages(fBdataResponse)
+    setPIndex(1)
+  }
 }
 
 export default function ManageFeedback() {
@@ -28,7 +30,6 @@ export default function ManageFeedback() {
   const Feedback_ByName_URL = Constants.Feedback_ByName_URL;
   const ALL_Feedback_URL = Constants.Feedback_GETALL_URL;
 
-  
 
   const handlePrevBtnClick = () => {
     nav('/home');
@@ -38,13 +39,16 @@ export default function ManageFeedback() {
     flName: "",
     email: "",
     phoneNumber: "",
-    fbMessage: ""
+    fbMessage: "",
+    updt_ts: "",
   }
 
 
   const [fbFormData, setFbFormData] = useState(initialFBFormValue)
   const [errors, setErrors] = useState({})
   const [messages, setMessages] = useState([])
+  const [pIndex, setPIndex] = useState(0)
+  const [selectFBMessage, setSelectFBMessage] = useState()
 
   const handleInputChange = (e) => {
     setFbFormData({ ...fbFormData, [e.target.name]: e.target.value })
@@ -54,6 +58,7 @@ export default function ManageFeedback() {
     e.preventDefault()
     setMessages([])
     setFbFormData(initialFBFormValue)
+    setPIndex(0)
     setErrors({})
   }
 
@@ -75,11 +80,11 @@ export default function ManageFeedback() {
     if (!fbFormData.flName) {
       axios.get(ALL_Feedback_URL).then(
         (response) => {
-          extractFeedbackResponse(response, fBDataResponse, setMessages);
+          extractFeedbackResponse(response, fBDataResponse, setMessages, setPIndex);
         }
       )
     }
-   
+
   }
 
   const handleFeedbackSearch = (e) => {
@@ -101,8 +106,7 @@ export default function ManageFeedback() {
             setErrors(newErrors)
             setFbFormData(initialFBFormValue)
           } else {
-            //console.log(data)
-            extractFeedbackResponse(response, fBDataResponse, setMessages);
+            extractFeedbackResponse(response, fBDataResponse, setMessages, setPIndex);
             setFbFormData(initialFBFormValue)
           }
         }
@@ -112,28 +116,32 @@ export default function ManageFeedback() {
         });
     }
   }
-
+  
+  console.log(selectFBMessage)
   return (
-    <div>
-      <form onSubmit={handleFeedbackSearch}>
-        <h1>Manage Feedback</h1>
-        <div>
-          <div className="fb-md-container">
-            {errors.flName && <div className="fb-md-error" >{errors.flName}</div>}
-            <input autoFocus={true} placeholder="Your Name" name="flName" value={fbFormData.flName} onChange={handleInputChange} />
-          </div>
+    <>
+      <div>
+        <form onSubmit={handleFeedbackSearch}>
+          <h2>Manage Feedback</h2>
           <div>
-            <button class="button-style" onClick={handlePrevBtnClick}>Previous</button>
-            <button class="button-style" type='submit'>Search</button>
-            <button class="button-style" onClick={handleAllFeedback} >ALL Feedback</button>
-            <button class="button-style" onClick={resetURForm}>Reset</button>
+            <div className="fb-md-container">
+              {errors.flName && <div className="fb-md-error" >{errors.flName}</div>}
+              <input autoFocus={true} placeholder="Your Name" name="flName" value={fbFormData.flName} onChange={handleInputChange} />
+            </div>
+            <div>
+              <button class="button-style" onClick={handlePrevBtnClick}>Previous</button>
+              <button class="button-style" type='submit'>Search</button>
+              <button class="button-style" onClick={handleAllFeedback} >ALL Feedback</button>
+              <button class="button-style" onClick={resetURForm}>Reset</button>
+            </div>
+            <div>
+              {errors.NoRecord && <div className="fb-md-error" >{errors.NoRecord} </div>}
+            </div>
           </div>
-          <div>
-            {errors.NoRecord && <div className="fb-md-error" >{errors.NoRecord} </div>}
-          </div>
-        </div>
-      </form>
-      <FeedbackTable messages={messages}/>
-    </div>
+        </form>
+        <FeedbackTable messages={messages} pageInitialValue={pIndex} setSelectFBMessage={setSelectFBMessage} />
+      </div>
+      
+    </>
   )
 }

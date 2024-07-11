@@ -22,7 +22,7 @@ export default function FeedbackForm() {
 
   const [fbFormData, setFbFormData] = useState(initialFBFormValue)
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleInputChange = (e) => {
     setFbFormData({ ...fbFormData, [e.target.name]: e.target.value })
@@ -34,7 +34,8 @@ export default function FeedbackForm() {
     setErrors({})
   }
 
-  const validateForm = () => {
+  const validateForm = (e) => {
+    //e.preventDefault()
     let isValid = true
     const newErrors = {}
 
@@ -65,23 +66,26 @@ export default function FeedbackForm() {
   const onFBSubmit = (e) => {
     e.preventDefault()
     if (validateForm()) {
-      const nD = `${JSON.stringify(fbFormData, null, ' ')}`
-      console.log("Printing nd --> " + nD)
-      alert(`${JSON.stringify(fbFormData, null, ' ')}`)
-      console.log(Feedback_SAVE_URL)
+      const feedbackMessage = `${JSON.stringify(fbFormData, null, ' ')}`
+      const successMessage = 'Your feedback has been submitted successfully!!!'
+      
+      //alert(`${JSON.stringify(fbFormData, null, ' ')}`)
+      //alert(`${successMessage}`)
 
-      axios.post(Feedback_SAVE_URL, nD, {
+      
+      axios.post(Feedback_SAVE_URL, feedbackMessage, {
         headers: {
           // Overwrite Axios's automatically set Content-Type
           'Content-Type': 'application/json'
         }}).then((response) => {
+          setSubmitMessage(successMessage)
           console.log(response);
         }, (error) => {
           console.log(error);
         });
-      
+        setFbFormData(initialFBFormValue)
     }
-    setFbFormData(initialFBFormValue)
+    
   }
 
   const isFormValid = Object.keys(errors).length === 0;
@@ -91,6 +95,7 @@ export default function FeedbackForm() {
       <form onSubmit={onFBSubmit}>
         <div className="feedback-container">
           <h1>Feedback Form</h1>
+          <h3 style={{color:'green'}}>{submitMessage}</h3>
           <div className="fb-ud-container">
             <div>
               {errors.flName && <div className="feedbackError" >{errors.flName}</div>}

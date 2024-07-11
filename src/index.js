@@ -5,7 +5,9 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
+  //Strict Mode is commented, causing problem in row selection
+  // <React.StrictMode>
+  //   <App />
+  // </React.StrictMode>
 );
